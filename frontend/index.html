@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager Pro & Markdown</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Parser Markdown ultra-léger via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Mes Tâches</h1>
+      <p id="counter">0 tâche restante</p>
+    </header>
+
+    <!-- Section Templates -->
+    <div class="template-section">
+      <label for="template-select">📋 Charger un template :</label>
+      <select id="template-select">
+        <option value="" disabled selected>Choisir un modèle...</option>
+        <option value="dev">💻 Projet Web / Dev</option>
+        <option value="school">📚 Cours & Révisions</option>
+        <option value="routine">🌅 Routine Quotidienne</option>
+      </select>
+    </div>
+
+    <!-- Formulaire d'ajout -->
+    <form id="todo-form">
+      <input type="text" id="todo-input" placeholder="Ajouter une tâche (supporte **gras**, *italique*, `code`...)" required autocomplete="off">
+      <select id="priority-select">
+        <option value="low">Basse</option>
+        <option value="medium" selected>Moyenne</option>
+        <option value="high">Haute</option>
+      </select>
+      <button type="submit" id="add-btn">Ajouter</button>
+    </form>
+
+    <!-- Filtres -->
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Toutes</button>
+      <button class="filter-btn" data-filter="active">Actives</button>
+      <button class="filter-btn" data-filter="completed">Terminées</button>
+    </div>
+
+    <!-- Liste de tâches -->
+    <ul id="todo-list"></ul>
+  </div>
+
+  <!-- Entrée principale JavaScript chargée sous forme de Module ES -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
