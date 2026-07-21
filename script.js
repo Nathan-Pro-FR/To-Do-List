@@ -111,6 +111,58 @@ function updateCounter(todos) {
   counter.textContent = `${activeCount} tâche${activeCount > 1 ? 's' : ''} restante${activeCount > 1 ? 's' : ''}`;
 }
 
+function updateStats(todos) {
+  const total = todos.length;
+
+  if (total === 0) {
+    document.getElementById('completion-ratio').textContent = "0% faites • 0% à faire";
+    document.getElementById('bar-true').style.width = "0%";
+    document.getElementById('bar-false').style.width = "100%";
+    document.getElementById('priority-pie').style.background = "conic-gradient(#475569 0deg 360deg)";
+    document.getElementById('pct-high').textContent = "0%";
+    document.getElementById('pct-medium').textContent = "0%";
+    document.getElementById('pct-low').textContent = "0%";
+    return;
+  }
+
+  // 1. Calcul avancement (Faites / À faire)
+  const completedCount = todos.filter(t => t.completed).length;
+  const pctCompleted = Math.round((completedCount / total) * 100);
+  const pctActive = 100 - pctCompleted;
+
+  document.getElementById('completion-ratio').textContent = `${pctCompleted}% faites • ${pctActive}% à faire`;
+  document.getElementById('bar-true').style.width = `${pctCompleted}%`;
+  document.getElementById('bar-false').style.width = `${pctActive}%`;
+
+  const barTrueLabel = document.querySelector('#bar-true .segment-label');
+  const barFalseLabel = document.querySelector('#bar-false .segment-label');
+  if (barTrueLabel) barTrueLabel.style.display = pctCompleted < 10 ? 'none' : 'inline';
+  if (barFalseLabel) barFalseLabel.style.display = pctActive < 10 ? 'none' : 'inline';
+
+  // 2. Calcul des priorités pour le camembert
+  const highCount = todos.filter(t => t.priority === 'high').length;
+  const medCount = todos.filter(t => t.priority === 'medium').length;
+
+  const pctHigh = Math.round((highCount / total) * 100);
+  const pctMed = Math.round((medCount / total) * 100);
+  const pctLow = 100 - (pctHigh + pctMed);
+
+  document.getElementById('pct-high').textContent = `${pctHigh}%`;
+  document.getElementById('pct-medium').textContent = `${pctMed}%`;
+  document.getElementById('pct-low').textContent = `${pctLow}%`;
+
+  // Dynamic CSS variables pour le conic-gradient
+  const angleHigh = (highCount / total) * 360;
+  const angleMed = angleHigh + ((medCount / total) * 360);
+
+  const pieChart = document.getElementById('priority-pie');
+  pieChart.style.background = `conic-gradient(
+    var(--priority-high) 0deg ${angleHigh}deg,
+    var(--priority-medium) ${angleHigh}deg ${angleMed}deg,
+    var(--priority-low) ${angleMed}deg 360deg
+  )`;
+}
+
 function renderTodos(todos, currentFilter, callbacks) {
   todoList.innerHTML = '';
   const filteredTodos = todos.filter(todo => {
@@ -210,6 +262,8 @@ function refresh() {
     onEdit: handleEdit,
     onDelete: handleDelete
   });
+
+  updateStats(todos);
 }
 
 // Handlers d'actions
