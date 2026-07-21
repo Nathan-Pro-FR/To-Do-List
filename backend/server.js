@@ -21,3 +21,7 @@ app.use('/api/tasks', require('./routes/tasks'));
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
 });
+
+app.get('/', (req, res) => {
+  res.send('API TodoList sur Render opérationnelle ! 🚀');
+});

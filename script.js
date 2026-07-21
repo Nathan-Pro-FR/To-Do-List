@@ -2,7 +2,7 @@
 // 1. CONFIGURATION
 // ==========================================
 // Remplace par ton URL Render pour la prod : "https://ton-app.onrender.com/api/tasks"
-const API_URL = "https://to-do-list-backend-4qko.onrender.com";
+const API_URL = "https://to-do-list-backend-4qko.onrender.com/api/tasks";
 
 
 // ==========================================
