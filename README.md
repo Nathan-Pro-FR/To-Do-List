@@ -176,20 +176,49 @@ Sélectionnez un template pour charger des tâches prédéfinies :
 ## 🛠️ Stack Technique
 
 ### Frontend
+
+<div align="center">
+
+[![HTML5](https://img.shields.io/badge/HTML5-E34C26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Marked.js](https://img.shields.io/badge/Marked.js-FFD700?style=for-the-badge&logo=markdown&logoColor=black)](https://marked.js.org/)
+
 - **HTML5** : Structure sémantique
 - **CSS3** : Design moderne avec variables CSS et animations
 - **JavaScript Vanilla** : Aucune dépendance frontend (sauf Marked.js)
 - **Marked.js** : Parser Markdown léger (CDN)
 
+</div>
+
 ### Backend
+
+<div align="center">
+
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+
 - **Node.js** : Runtime JavaScript côté serveur
 - **Express.js** : Framework web léger et modulaire
 - **MongoDB** : Base de données NoSQL orientée documents
 
-### DevOps
+</div>
+
+### DevOps & Deployment
+
+<div align="center">
+
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/)
+[![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
+[![CORS](https://img.shields.io/badge/CORS-FF6B00?style=for-the-badge&logo=nginx&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+
+- **GitHub** : Versioning et contrôle de source
 - **Render** : Hébergement du backend
 - **GitHub Pages** : Possible pour le frontend (fichiers statiques)
 - **CORS** : Gestion des requêtes cross-origin
+
+</div>
 
 ---
 
