@@ -53,6 +53,42 @@
       </div>
     </form>
 
+    <!-- Section Statistiques -->
+    <div class="stats-container">
+      <h3>Statistiques</h3>
+
+      <!-- 1. Barre de progression Complétées vs En cours -->
+      <div class="stat-block">
+        <div class="stat-header">
+          <span>Avancement</span>
+          <span id="completion-ratio">0% faites • 0% à faire</span>
+        </div>
+        <div class="progress-bar-container">
+          <div id="bar-true" class="progress-segment true" style="width: 0%;">
+            <span class="segment-label">Faites</span>
+          </div>
+          <div id="bar-false" class="progress-segment false" style="width: 100%;">
+            <span class="segment-label">À faire</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Camembert des Priorités -->
+      <div class="stat-block priority-stat">
+        <div class="stat-header">
+          <span>Répartition par Priorité</span>
+        </div>
+        <div class="pie-wrapper">
+          <div id="priority-pie" class="pie-chart"></div>
+          <div class="pie-legend">
+            <div><span class="dot high"></span> Haute (<span id="pct-high">0%</span>)</div>
+            <div><span class="dot medium"></span> Moyenne (<span id="pct-medium">0%</span>)</div>
+            <div><span class="dot low"></span> Basse (<span id="pct-low">0%</span>)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Filtres -->
     <div class="filters">
       <button class="filter-btn active" data-filter="all">Toutes</button>
