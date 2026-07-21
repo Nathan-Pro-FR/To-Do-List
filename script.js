@@ -3,7 +3,6 @@
 // ==========================================
 const API_URL = "https://to-do-list-backend-4qko.onrender.com/api/tasks";
 
-
 // ==========================================
 // 2. TEMPLATES (BANQUE DE MODÈLES)
 // ==========================================
@@ -27,7 +26,6 @@ const TEMPLATES = {
     { text: "30 minutes de **code** ou de *lecture*", priority: "medium" }
   ]
 };
-
 
 // ==========================================
 // 3. FONCTIONS UTILITAIRES (HELPERS)
@@ -68,7 +66,6 @@ function sanitizeMarkdown(text) {
   return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-
 // ==========================================
 // 4. APPELS API (BACKEND NODE/MONGODB)
 // ==========================================
@@ -103,7 +100,6 @@ async function deleteTask(id) {
   if (!res.ok) throw new Error("Erreur lors de la suppression");
 }
 
-
 // ==========================================
 // 5. GESTION DU DOM & INTERFACE UTILISATEUR
 // ==========================================
@@ -131,8 +127,12 @@ function renderTodos(todos, currentFilter, callbacks) {
       ? marked.parse(sanitizeMarkdown(todo.text))
       : sanitizeMarkdown(todo.text);
 
+    const descriptionMarkdown = typeof marked !== 'undefined'
+      ? marked.parse(sanitizeMarkdown(todo.description))
+      : sanitizeMarkdown(todo.description);
+
     const descriptionHtml = todo.description 
-      ? `<p class="todo-description-text">${sanitizeMarkdown(todo.description)}</p>` 
+      ? `<div class="todo-description-text">${descriptionMarkdown}</div>` 
       : '';
 
     const dueDateHtml = renderDueDate(todo.dueDate);
@@ -174,7 +174,6 @@ function renderTodos(todos, currentFilter, callbacks) {
 
   updateCounter(todos);
 }
-
 
 // ==========================================
 // 6. APPLI PRINCIPALE & ÉVÉNEMENTS
