@@ -1,7 +1,6 @@
 // ==========================================
 // 1. CONFIGURATION
 // ==========================================
-// Remplace par ton URL Render pour la prod : "https://ton-app.onrender.com/api/tasks"
 const API_URL = "https://to-do-list-backend-4qko.onrender.com/api/tasks";
 
 
@@ -10,15 +9,15 @@ const API_URL = "https://to-do-list-backend-4qko.onrender.com/api/tasks";
 // ==========================================
 const TEMPLATES = {
   dev: [
-    { text: "Créer la structure `index.html`", priority: "high" },
-    { text: "Configurer la feuille de style `style.css`", priority: "medium" },
-    { text: "Implémenter la logique JavaScript", priority: "high" },
-    { text: "Tester l'API **Express** et **MongoDB**", priority: "medium" },
-    { text: "Publier le projet sur [GitHub](https://github.com)", priority: "low" }
+    { text: "Créer la structure `index.html`", priority: "high", description: "Mettre en place la sémantique HTML5" },
+    { text: "Configurer la feuille de style `style.css`", priority: "medium", description: "Design responsive avec effets néon" },
+    { text: "Implémenter la logique JavaScript", priority: "high", description: "Connecter le frontend aux endpoints de l'API" },
+    { text: "Tester l'API **Express** et **MongoDB**", priority: "medium", description: "Vérifier le bon fonctionnement des requêtes CRUD" },
+    { text: "Publier le projet sur [GitHub](https://github.com)", priority: "low", description: "Deploy sur Render et GitHub Pages" }
   ],
   school: [
-    { text: "Relire le cours de **STI2D / SIN**", priority: "high" },
-    { text: "Faire les exercices de `Maths`", priority: "medium" },
+    { text: "Relire le cours de **STI2D / SIN**", priority: "high", description: "Révision des concepts clés" },
+    { text: "Faire les exercices de `Maths`", priority: "medium", description: "Chapitre sur les suites" },
     { text: "Fiche de synthèse : *Systèmes d'Information*", priority: "medium" },
     { text: "Préparer le sac pour demain", priority: "low" }
   ],
@@ -45,7 +44,27 @@ function formatDate(isoString) {
   });
 }
 
+function renderDueDate(isoString) {
+  if (!isoString) return '';
+  
+  const due = new Date(isoString);
+  const now = new Date();
+  const isOverdue = due < now;
+
+  const formattedDate = due.toLocaleString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  return `<span class="due-badge ${isOverdue ? 'overdue' : ''}">
+    ⏰ ${isOverdue ? 'En retard :' : 'Échéance :'} ${formattedDate}
+  </span>`;
+}
+
 function sanitizeMarkdown(text) {
+  if (!text) return '';
   return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
@@ -59,11 +78,11 @@ async function getTasks() {
   return await res.json();
 }
 
-async function createTask(text, priority) {
+async function createTask(taskData) {
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, priority })
+    body: JSON.stringify(taskData)
   });
   if (!res.ok) throw new Error("Erreur lors de la création");
   return await res.json();
@@ -112,6 +131,12 @@ function renderTodos(todos, currentFilter, callbacks) {
       ? marked.parse(sanitizeMarkdown(todo.text))
       : sanitizeMarkdown(todo.text);
 
+    const descriptionHtml = todo.description 
+      ? `<p class="todo-description-text">${sanitizeMarkdown(todo.description)}</p>` 
+      : '';
+
+    const dueDateHtml = renderDueDate(todo.dueDate);
+
     const createdStr = formatDate(todo.createdAt);
     const updatedStr = formatDate(todo.updatedAt);
     const showUpdated = todo.updatedAt && (new Date(todo.updatedAt) - new Date(todo.createdAt) > 1000);
@@ -123,13 +148,15 @@ function renderTodos(todos, currentFilter, callbacks) {
         <input type="checkbox" ${todo.completed ? 'checked' : ''}>
         <div class="todo-body">
           <div class="todo-text">${markdownHtml}</div>
+          ${descriptionHtml}
+          ${dueDateHtml}
           <span class="todo-dates">${dateText}</span>
         </div>
       </div>
       <button class="delete-btn" title="Supprimer">&times;</button>
     `;
 
-    // Événements sur les éléments créés
+    // Événements
     li.querySelector('input[type="checkbox"]').addEventListener('change', () => {
       callbacks.onToggle(todo._id, !todo.completed);
     });
@@ -159,10 +186,12 @@ let currentFilter = 'all';
 const todoForm = document.getElementById('todo-form');
 const todoInput = document.getElementById('todo-input');
 const prioritySelect = document.getElementById('priority-select');
+const todoDesc = document.getElementById('todo-desc');
+const todoDueDate = document.getElementById('todo-duedate');
 const templateSelect = document.getElementById('template-select');
 const filterBtns = document.querySelectorAll('.filter-btn');
 
-// Initialisation de Marked.js s'il est présent
+// Initialisation de Marked.js
 if (typeof marked !== 'undefined') {
   marked.setOptions({ breaks: true, gfm: true });
 }
@@ -185,9 +214,9 @@ function refresh() {
 }
 
 // Handlers d'actions
-async function handleAdd(text, priority) {
+async function handleAdd(taskData) {
   try {
-    const newTodo = await createTask(text, priority);
+    const newTodo = await createTask(taskData);
     todos.unshift(newTodo);
     refresh();
   } catch (err) {
@@ -206,7 +235,7 @@ async function handleToggle(id, completed) {
 }
 
 async function handleEdit(id, oldText) {
-  const newText = prompt("Modifier la tâche :", oldText);
+  const newText = prompt("Modifier le titre de la tâche :", oldText);
   if (newText && newText.trim() !== "" && newText !== oldText) {
     try {
       const updated = await updateTask(id, { text: newText.trim() });
@@ -228,27 +257,45 @@ async function handleDelete(id) {
   }
 }
 
-// Événements
+// Soumission du formulaire
 todoForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const text = todoInput.value.trim();
   if (text) {
-    handleAdd(text, prioritySelect.value);
+    const taskData = {
+      text,
+      priority: prioritySelect.value,
+      description: todoDesc ? todoDesc.value.trim() : '',
+      dueDate: todoDueDate && todoDueDate.value ? new Date(todoDueDate.value).toISOString() : null
+    };
+
+    handleAdd(taskData);
+
+    // Reset des champs
     todoInput.value = '';
+    if (todoDesc) todoDesc.value = '';
+    if (todoDueDate) todoDueDate.value = '';
     todoInput.focus();
   }
 });
 
+// Chargement de templates
 templateSelect.addEventListener('change', async (e) => {
   const key = e.target.value;
   if (TEMPLATES[key]) {
     for (const item of TEMPLATES[key]) {
-      await handleAdd(item.text, item.priority);
+      await handleAdd({
+        text: item.text,
+        priority: item.priority,
+        description: item.description || '',
+        dueDate: null
+      });
     }
     templateSelect.value = "";
   }
 });
 
+// Filtres
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     filterBtns.forEach(b => b.classList.remove('active'));

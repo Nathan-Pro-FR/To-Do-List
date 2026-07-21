@@ -13,6 +13,14 @@ const taskSchema = new mongoose.Schema({
   completed: { 
     type: Boolean, 
     default: false 
+  },
+  description: {
+    type: String,
+    default: ''
+  },
+  dueDate: {
+    type: Date,
+    default: null
   }
 }, { 
   timestamps: true // Génère automatiquement createdAt et updatedAt !

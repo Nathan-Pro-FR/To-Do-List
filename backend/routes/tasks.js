@@ -16,7 +16,9 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const task = new Task({
     text: req.body.text,
-    priority: req.body.priority
+    priority: req.body.priority,
+    description: req.body.description || '',
+    dueDate: req.body.dueDate || null
   });
 
   try {
@@ -27,7 +29,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT / PATCH : Mettre à jour une tâche (complétée ou texte)
+// PATCH : Mettre à jour une tâche
 router.patch('/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -36,6 +38,8 @@ router.patch('/:id', async (req, res) => {
     if (req.body.completed !== undefined) task.completed = req.body.completed;
     if (req.body.text !== undefined) task.text = req.body.text;
     if (req.body.priority !== undefined) task.priority = req.body.priority;
+    if (req.body.description !== undefined) task.description = req.body.description;
+    if (req.body.dueDate !== undefined) task.dueDate = req.body.dueDate;
 
     const updatedTask = await task.save();
     res.json(updatedTask);

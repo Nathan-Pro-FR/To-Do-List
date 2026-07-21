@@ -28,13 +28,29 @@
 
     <!-- Formulaire d'ajout -->
     <form id="todo-form">
-      <input type="text" id="todo-input" placeholder="Ajouter une tâche (supporte **gras**, *italique*, `code`...)" required autocomplete="off">
-      <select id="priority-select">
-        <option value="low">Basse</option>
-        <option value="medium" selected>Moyenne</option>
-        <option value="high">Haute</option>
-      </select>
-      <button type="submit" id="add-btn">Ajouter</button>
+      <!-- Ligne principale : Titre & Priorité -->
+      <div class="form-row">
+        <input type="text" id="todo-input" placeholder="Titre de la tâche (**gras**, *italique*, `code`...)" required autocomplete="off">
+        <select id="priority-select">
+          <option value="low">Basse</option>
+          <option value="medium" selected>Moyenne</option>
+          <option value="high">Haute</option>
+        </select>
+      </div>
+
+      <!-- Ligne secondaire : Description optionnelle -->
+      <div class="form-row">
+        <textarea id="todo-desc" placeholder="Description ou notes détaillées (optionnel)..." rows="2"></textarea>
+      </div>
+
+      <!-- Ligne tertiaire : Échéance & Bouton d'ajout -->
+      <div class="form-row form-row-bottom">
+        <div class="date-group">
+          <label for="todo-duedate">⏰ Échéance :</label>
+          <input type="datetime-local" id="todo-duedate">
+        </div>
+        <button type="submit" id="add-btn">Ajouter</button>
+      </div>
     </form>
 
     <!-- Filtres -->
@@ -47,7 +63,6 @@
     <!-- Liste de tâches -->
     <ul id="todo-list"></ul>
   </div>
-
 
   <script src="script.js"></script>
 </body>
