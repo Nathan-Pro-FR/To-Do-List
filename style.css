@@ -7,15 +7,20 @@
   --primary-glow: rgba(56, 189, 248, 0.35);
   --border-radius: 12px;
   
-  /* Couleurs de priorité style Néon */
+  /* --- ÉTATS NÉON : BASSE (LOW) --- */
   --priority-low: #10b981;
   --priority-low-glow: rgba(16, 185, 129, 0.4);
+  --priority-low-dim: #064e3b;
   
+  /* --- ÉTATS NÉON : MOYENNE (MEDIUM) --- */
   --priority-medium: #f59e0b;
   --priority-medium-glow: rgba(245, 158, 11, 0.4);
+  --priority-medium-dim: #78350f;
   
+  /* --- ÉTATS NÉON : HAUTE (HIGH) --- */
   --priority-high: #ef4444;
   --priority-high-glow: rgba(239, 68, 68, 0.45);
+  --priority-high-dim: #7f1d1d;
 }
 
 * {
@@ -87,7 +92,7 @@ header p {
   outline: none;
 }
 
-/* --- Formulaire d'ajout & Mises en page --- */
+/* --- Formulaire d'ajout --- */
 form {
   display: flex;
   flex-direction: column;
@@ -187,7 +192,7 @@ button#add-btn:hover {
   box-shadow: 0 0 18px rgba(56, 189, 248, 0.6);
 }
 
-/* --- Section Statistiques --- */
+/* --- Section Statistiques & Graphiques Néon --- */
 .stats-container {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -204,6 +209,7 @@ button#add-btn:hover {
   color: var(--primary-color);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-shadow: 0 0 8px var(--primary-glow);
 }
 
 .stat-header {
@@ -214,7 +220,7 @@ button#add-btn:hover {
   margin-bottom: 0.4rem;
 }
 
-/* Barre de progression segmentée */
+/* Barre de progression Néon */
 .progress-bar-container {
   display: flex;
   height: 22px;
@@ -234,12 +240,12 @@ button#add-btn:hover {
 }
 
 .progress-segment.true {
-  background: #38bdf8;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  background: var(--primary-color);
+  box-shadow: 0 0 12px var(--primary-glow);
 }
 
 .progress-segment.false {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .segment-label {
@@ -254,7 +260,7 @@ button#add-btn:hover {
   color: var(--text-muted);
 }
 
-/* Camembert Néon */
+/* Camembert Néon avec halo dynamique */
 .pie-wrapper {
   display: flex;
   align-items: center;
@@ -267,9 +273,10 @@ button#add-btn:hover {
   height: 70px;
   border-radius: 50%;
   background: conic-gradient(#475569 0deg 360deg);
-  transition: background 0.4s ease;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), 0 0 10px rgba(56, 189, 248, 0.2);
   flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .pie-legend {
@@ -291,11 +298,39 @@ button#add-btn:hover {
   height: 8px;
   border-radius: 50%;
   display: inline-block;
+  transition: all 0.3s ease;
 }
 
-.dot.high { background: var(--priority-high); box-shadow: 0 0 5px var(--priority-high); }
-.dot.medium { background: var(--priority-medium); box-shadow: 0 0 5px var(--priority-medium); }
-.dot.low { background: var(--priority-low); box-shadow: 0 0 5px var(--priority-low); }
+/* États Néon Actif */
+.dot.high {
+  background: var(--priority-high);
+  box-shadow: 0 0 8px var(--priority-high-glow);
+}
+.dot.medium {
+  background: var(--priority-medium);
+  box-shadow: 0 0 8px var(--priority-medium-glow);
+}
+.dot.low {
+  background: var(--priority-low);
+  box-shadow: 0 0 8px var(--priority-low-glow);
+}
+
+/* États Néon Éteint / Atténué */
+.dot.high.dim {
+  background: var(--priority-high-dim);
+  box-shadow: none;
+  opacity: 0.4;
+}
+.dot.medium.dim {
+  background: var(--priority-medium-dim);
+  box-shadow: none;
+  opacity: 0.4;
+}
+.dot.low.dim {
+  background: var(--priority-low-dim);
+  box-shadow: none;
+  opacity: 0.4;
+}
 
 /* --- Filtres --- */
 .filters {
@@ -372,7 +407,7 @@ ul {
   cursor: pointer;
 }
 
-/* --- Badges & Effets Néon par Priorité --- */
+/* Badges Néon Liste de tâches */
 .badge {
   width: 10px;
   height: 10px;
@@ -408,7 +443,7 @@ ul {
   box-shadow: 0 0 8px var(--priority-high-glow);
 }
 
-/* --- Corps de la tâche, Description et Échéance --- */
+/* Corps tâche, desc & dates */
 .todo-body {
   display: flex;
   flex-direction: column;
@@ -443,17 +478,6 @@ ul {
   font-family: 'Fira Code', monospace;
   font-size: 0.85em;
   border: 1px solid rgba(56, 189, 248, 0.2);
-}
-
-.todo-description-text a {
-  color: #60a5fa;
-  text-decoration: underline;
-}
-
-.todo-description-text ul, 
-.todo-description-text ol {
-  margin-left: 1.2rem;
-  margin-top: 0.2rem;
 }
 
 .due-badge {
@@ -501,7 +525,6 @@ ul {
   transform: scale(1.1);
 }
 
-/* --- Rendu Markdown titre --- */
 .todo-text {
   word-break: break-word;
   color: #f1f5f9;
@@ -529,9 +552,4 @@ ul {
   font-family: 'Fira Code', monospace;
   font-size: 0.85em;
   border: 1px solid rgba(56, 189, 248, 0.2);
-}
-
-.todo-text a {
-  color: #60a5fa;
-  text-decoration: underline;
 }
