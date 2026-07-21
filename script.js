@@ -101,7 +101,7 @@ async function deleteTask(id) {
 }
 
 // ==========================================
-// 5. GESTION DU DOM & INTERFACE UTILISATEUR
+// 5. GESTION DU DOM & STATISTIQUES NÉON
 // ==========================================
 const todoList = document.getElementById('todo-list');
 const counter = document.getElementById('counter');
@@ -112,13 +112,19 @@ function updateCounter(todos) {
 }
 
 function updateStats(todos) {
+  console.log("📊 [Stats Sync] Mise à jour des graphiques...", todos);
   const total = todos.length;
+
+  const barTrue = document.getElementById('bar-true');
+  const barFalse = document.getElementById('bar-false');
+  const pieChart = document.getElementById('priority-pie');
 
   if (total === 0) {
     document.getElementById('completion-ratio').textContent = "0% faites • 0% à faire";
-    document.getElementById('bar-true').style.width = "0%";
-    document.getElementById('bar-false').style.width = "100%";
-    document.getElementById('priority-pie').style.background = "conic-gradient(#475569 0deg 360deg)";
+    if (barTrue) barTrue.style.width = "0%";
+    if (barFalse) barFalse.style.width = "100%";
+    if (pieChart) pieChart.style.background = "conic-gradient(#334155 0deg 360deg)";
+    
     document.getElementById('pct-high').textContent = "0%";
     document.getElementById('pct-medium').textContent = "0%";
     document.getElementById('pct-low').textContent = "0%";
@@ -131,17 +137,18 @@ function updateStats(todos) {
   const pctActive = 100 - pctCompleted;
 
   document.getElementById('completion-ratio').textContent = `${pctCompleted}% faites • ${pctActive}% à faire`;
-  document.getElementById('bar-true').style.width = `${pctCompleted}%`;
-  document.getElementById('bar-false').style.width = `${pctActive}%`;
+  if (barTrue) barTrue.style.width = `${pctCompleted}%`;
+  if (barFalse) barFalse.style.width = `${pctActive}%`;
 
   const barTrueLabel = document.querySelector('#bar-true .segment-label');
   const barFalseLabel = document.querySelector('#bar-false .segment-label');
   if (barTrueLabel) barTrueLabel.style.display = pctCompleted < 10 ? 'none' : 'inline';
   if (barFalseLabel) barFalseLabel.style.display = pctActive < 10 ? 'none' : 'inline';
 
-  // 2. Calcul des priorités pour le camembert
+  // 2. Calcul des priorités
   const highCount = todos.filter(t => t.priority === 'high').length;
   const medCount = todos.filter(t => t.priority === 'medium').length;
+  const lowCount = todos.filter(t => t.priority === 'low').length;
 
   const pctHigh = Math.round((highCount / total) * 100);
   const pctMed = Math.round((medCount / total) * 100);
@@ -151,16 +158,31 @@ function updateStats(todos) {
   document.getElementById('pct-medium').textContent = `${pctMed}%`;
   document.getElementById('pct-low').textContent = `${pctLow}%`;
 
-  // Dynamic CSS variables pour le conic-gradient
+  // Gestion des points lumineux (Active vs Dim)
+  const dotHigh = document.querySelector('.dot.high');
+  const dotMedium = document.querySelector('.dot.medium');
+  const dotLow = document.querySelector('.dot.low');
+
+  if (dotHigh) dotHigh.classList.toggle('dim', highCount === 0);
+  if (dotMedium) dotMedium.classList.toggle('dim', medCount === 0);
+  if (dotLow) dotLow.classList.toggle('dim', lowCount === 0);
+
+  // Dynamic Conic Gradient avec Couleurs Néon Directes (Fallback robuste)
   const angleHigh = (highCount / total) * 360;
   const angleMed = angleHigh + ((medCount / total) * 360);
 
-  const pieChart = document.getElementById('priority-pie');
-  pieChart.style.background = `conic-gradient(
-    var(--priority-high) 0deg ${angleHigh}deg,
-    var(--priority-medium) ${angleHigh}deg ${angleMed}deg,
-    var(--priority-low) ${angleMed}deg 360deg
-  )`;
+  // Couleurs Néon directes : Rouge, Orange, Vert
+  const colorHigh = "#ef4444";
+  const colorMed  = "#f59e0b";
+  const colorLow  = "#10b981";
+
+  if (pieChart) {
+    pieChart.style.background = `conic-gradient(
+      ${colorHigh} 0deg ${angleHigh}deg,
+      ${colorMed} ${angleHigh}deg ${angleMed}deg,
+      ${colorLow} ${angleMed}deg 360deg
+    )`;
+  }
 }
 
 function renderTodos(todos, currentFilter, callbacks) {
