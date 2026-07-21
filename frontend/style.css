@@ -1,0 +1,215 @@
+:root {
+  --bg-color: #f4f7f6;
+  --card-bg: #ffffff;
+  --text-color: #2c3e50;
+  --primary-color: #4a90e2;
+  --border-radius: 10px;
+  
+  --priority-low: #2ecc71;
+  --priority-medium: #f39c12;
+  --priority-high: #e74c3c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.app-container {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+header {
+  margin-bottom: 1.5rem;
+}
+
+header h1 {
+  font-size: 1.8rem;
+}
+
+header p {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* --- Section Templates --- */
+.template-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: #f8fafc;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  border: 1px dashed #cbd5e1;
+  font-size: 0.85rem;
+}
+
+.template-section select {
+  flex: 1;
+  padding: 0.4rem;
+  font-size: 0.85rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* --- Formulaire d'ajout --- */
+form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+}
+
+select, button {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+button#add-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+
+/* --- Filtres --- */
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filter-btn {
+  flex: 1;
+  border: none;
+  background: #edf2f7;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* --- Liste de tâches --- */
+ul {
+  list-style: none;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+  gap: 0.5rem;
+}
+
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.todo-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+/* --- Badges de priorité --- */
+.badge {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.badge.low { background-color: var(--priority-low); }
+.badge.medium { background-color: var(--priority-medium); }
+.badge.high { background-color: var(--priority-high); }
+
+/* --- Corps de la tâche et Horodatage --- */
+.todo-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.todo-dates {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* --- Rendu Markdown --- */
+.todo-text {
+  word-break: break-word;
+}
+
+.todo-text p {
+  display: inline;
+}
+
+.todo-text strong {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.todo-text em {
+  color: #475569;
+}
+
+.todo-text code {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.85em;
+  border: 1px solid #e2e8f0;
+}
+
+.todo-text a {
+  color: #2563eb;
+  text-decoration: underline;
+}
